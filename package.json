@@ -1,0 +1,17 @@
+{
+  "name": "mithril-demo",
+  "version": "1.0.0",
+  "description": "mithril-demo",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack src/index.js --output bin/app.js -d --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mithril": "^1.1.6",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3"
+  }
+}
