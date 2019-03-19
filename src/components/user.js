@@ -1,5 +1,6 @@
 import m from "mithril"
 import services from "../services"
+import { post } from "./post";
 
 export const user = {
     small: {
@@ -24,21 +25,25 @@ export const user = {
     },
     full: {
         oninit: (vnode) => {
-            services.user.get(vnode.attrs.id).then(u => vnode.state.user = u)
+            services.user.get(vnode.attrs.id).then(u => vnode.state.user = u);
+            services.post.byUser(vnode.attrs.id).then(p => vnode.state.userPosts = p);
         },
-        view: (vnode) => vnode.state.user ? m(".card", [
-            m(".card-image", [
-                m("figure.image.is-128x128", [
-                    m("img.is-rounded.is-centered", { src: vnode.state.user.picture ? vnode.state.user.picture : "https://dagoma.fr/medias/pictos/picto-user.svg" })
+        view: (vnode) => m("div", [
+            vnode.state.user ? m(".card", [
+                m(".card-image", [
+                    m("figure.image.is-128x128", [
+                        m("img.is-rounded.is-centered", { src: vnode.state.user.picture ? vnode.state.user.picture : "https://dagoma.fr/medias/pictos/picto-user.svg" })
+                    ]),
                 ]),
-            ]),
-            m(".card-content", [
-                m(".media-content", [
-                    m("p.title.is-4", vnode.state.user.name),
-                    m("p.subtitle.is-6", `@${vnode.state.user.username}`)
+                m(".card-content", [
+                    m(".media-content", [
+                        m("p.title.is-4", vnode.state.user.name),
+                        m("p.subtitle.is-6", `@${vnode.state.user.username}`)
+                    ]),
+                    m(".content", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae lorem erat. Donec sollicitudin eros nec egestas faucibus. In diam arcu, rutrum eget congue eu, pretium ut mauris. Suspendisse maximus dictum erat, lobortis placerat ipsum tristique et. Quisque lacinia erat augue, eget cursus enim scelerisque vitae. Integer justo nibh, pellentesque sed felis ut, aliquam posuere metus. Phasellus scelerisque mi in condimentum vestibulum. Nullam placerat fringilla orci ac laoreet. Ut maximus dolor sit amet justo blandit, ultrices malesuada ipsum congue. Morbi fermentum pulvinar urna, eget egestas nibh sollicitudin quis. Aliquam tempor, turpis vel ultricies pulvinar, ligula arcu efficitur risus, at mattis quam arcu id massa.")
                 ]),
-                m(".content", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae lorem erat. Donec sollicitudin eros nec egestas faucibus. In diam arcu, rutrum eget congue eu, pretium ut mauris. Suspendisse maximus dictum erat, lobortis placerat ipsum tristique et. Quisque lacinia erat augue, eget cursus enim scelerisque vitae. Integer justo nibh, pellentesque sed felis ut, aliquam posuere metus. Phasellus scelerisque mi in condimentum vestibulum. Nullam placerat fringilla orci ac laoreet. Ut maximus dolor sit amet justo blandit, ultrices malesuada ipsum congue. Morbi fermentum pulvinar urna, eget egestas nibh sollicitudin quis. Aliquam tempor, turpis vel ultricies pulvinar, ligula arcu efficitur risus, at mattis quam arcu id massa.")
-            ]),
-        ]) : null
+            ]) : null,
+            vnode.state.userPosts ? m(".tile.is-ancestor", vnode.state.userPosts.map(p => m(post.preview, { post: p }))) : null
+        ])
     }
 }
